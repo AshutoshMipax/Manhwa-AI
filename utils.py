@@ -36,8 +36,7 @@ def load_config():
             with open("config.json", "r") as f:
                 config_from_file = json.load(f)
 
-            # Simple merge: file values override defaults, no deep merge for nested dicts
-            # For more complex configs, a deep merge would be better.
+            # A simple merge for nested dictionaries.
             merged_config = DEFAULT_CONFIG.copy()
             for key, value in config_from_file.items():
                 if key in merged_config and isinstance(merged_config[key], dict) and isinstance(value, dict):
@@ -45,11 +44,9 @@ def load_config():
                 else:
                     merged_config[key] = value
             return merged_config
-        except json.JSONDecodeError as e:
-            print(f"Error decoding config.json: {e}. Using default config.")
-            return DEFAULT_CONFIG
-        except Exception as e:
-            print(f"Error loading config.json: {e}. Using default config.")
+        except (json.JSONDecodeError, IOError) as e:
+            # Using print here because logger might not be set up yet or might be the source of the issue.
+            print(f"Warning: Could not load or parse config.json: {e}. Using default config.")
             return DEFAULT_CONFIG
     return DEFAULT_CONFIG
 
@@ -59,17 +56,18 @@ def setup_logger():
     """Sets up a logger that writes to console and a file."""
     logger = logging.getLogger("ManhwaAI")
 
-    # Prevent multiple handlers if function is called again
+    # Prevent adding multiple handlers if this function is called again.
     if logger.hasHandlers():
-        logger.handlers.clear()
+        return logger
 
-    log_level_str = APP_CONFIG.get("logging", {}).get("log_level", "INFO").upper()
+    log_config = APP_CONFIG.get("logging", {})
+    log_level_str = log_config.get("log_level", "INFO").upper()
     log_level = getattr(logging, log_level_str, logging.INFO)
+
     logger.setLevel(log_level)
 
-    log_file = APP_CONFIG.get("logging", {}).get("log_file", "app.log")
+    log_file = log_config.get("log_file", "app.log")
 
-    # Formatter
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(module)s:%(lineno)d - %(message)s')
 
     # Console Handler
@@ -79,27 +77,12 @@ def setup_logger():
 
     # File Handler
     try:
-        fh = logging.FileHandler(log_file, mode='a') # Append mode
+        fh = logging.FileHandler(log_file, mode='a', encoding='utf-8')
         fh.setFormatter(formatter)
         logger.addHandler(fh)
     except Exception as e:
-        logger.error(f"Failed to set up file handler for logging: {e}")
-        # Continue with console logging
+        logger.error(f"Failed to set up file handler for logging to {log_file}: {e}")
 
     return logger
 
 logger = setup_logger()
-
-if __name__ == "__main__":
-    # Example usage of the logger and config
-    logger.info("Logger setup complete.")
-    logger.debug("This is a debug message.") # Won't show if level is INFO
-    logger.warning("This is a warning.")
-    logger.error("This is an error.")
-
-    vision_model_config = APP_CONFIG.get("vision_model", {})
-    logger.info(f"Vision model ID from config: {vision_model_config.get('model_id')}")
-
-    # Test loading a non-existent key
-    non_existent_config = APP_CONFIG.get("non_existent_key", {"default_value": "test"})
-    logger.info(f"Non-existent config test: {non_existent_config}")
