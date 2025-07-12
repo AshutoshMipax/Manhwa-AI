@@ -1,0 +1,26 @@
+{
+  "commands": [
+    {
+      "description": "Create virtual environment",
+      "shell": "python -m venv env"
+    },
+    {
+      "description": "Activate venv (Windows)",
+      "shell": "env\\Scripts\\activate.bat",
+      "if": "os == 'windows'"
+    },
+    {
+      "description": "Activate venv (Unix/macOS)",
+      "shell": "source env/bin/activate",
+      "if": "os != 'windows'"
+    },
+    {
+      "description": "Upgrade pip",
+      "shell": "python -m pip install --upgrade pip"
+    },
+    {
+      "description": "Install requirements",
+      "shell": "pip install -r requirements.txt"
+    }
+  ]
+}

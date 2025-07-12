@@ -1,10 +1,26 @@
 {
-    "input_folder": "",
-    "current_image": null,
-    "appearance_mode": "Dark",
-    "theme_color": "#3B8ED0",
-    "font_family": "Bangers-Regular.ttf",
-    "font_size": "",
-    "live_preview": true,
-    "performance_mode": false
+  "vision_model": {
+    "model_id": "Salesforce/blip-image-captioning-base",
+    "max_length": 50,
+    "num_beams": 4
+  },
+  "llm": {
+    "model_id": "distilgpt2",
+    "max_length": 250,
+    "min_length": 50,
+    "num_beams": 5,
+    "temperature": 0.7,
+    "no_repeat_ngram_size": 2
+  },
+  "tts": {
+    "lang": "en"
+  },
+  "video_maker": {
+    "output_fps": 24,
+    "default_image_duration": 3
+  },
+  "logging": {
+    "log_file": "app.log",
+    "log_level": "INFO"
+  }
 }

@@ -1,0 +1,18 @@
+{
+  "commands": [
+    {
+      "description": "Activate venv (Windows)",
+      "shell": "env\\Scripts\\activate.bat",
+      "if": "os == 'windows'"
+    },
+    {
+      "description": "Activate venv (Unix/macOS)",
+      "shell": "source env/bin/activate",
+      "if": "os != 'windows'"
+    },
+    {
+      "description": "Run app.py",
+      "shell": "python app.py"
+    }
+  ]
+}
