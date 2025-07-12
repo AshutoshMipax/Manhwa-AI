@@ -19,8 +19,14 @@
       "shell": "python -m pip install --upgrade pip"
     },
     {
-      "description": "Install requirements",
-      "shell": "pip install -r requirements.txt"
+      "description": "Install requirements (Windows)",
+      "shell": "pip install -r \"{{api.path}}\\requirements.txt\"",
+      "if": "os == 'windows'"
+    },
+    {
+      "description": "Install requirements (Unix/macOS)",
+      "shell": "pip install -r \"{{api.path}}/requirements.txt\"",
+      "if": "os != 'windows'"
     }
   ]
 }
