@@ -11,10 +11,6 @@
       "if": "os != 'windows'"
     },
     {
-      "description": "Change to project root directory",
-      "shell": "cd \"{{api.path}}\""
-    },
-    {
       "description": "Run app.py",
       "shell": "python app.py"
     }

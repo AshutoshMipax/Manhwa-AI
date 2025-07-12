@@ -15,10 +15,6 @@
       "if": "os != 'windows'"
     },
     {
-      "description": "Change to project root directory",
-      "shell": "cd \"{{api.path}}\""
-    },
-    {
       "description": "Upgrade pip",
       "shell": "python -m pip install --upgrade pip"
     },
